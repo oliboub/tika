@@ -9,12 +9,12 @@ List of metadata has to be in file: **metadata_ref.txt**.<br>
 
 mongo database is named: **tika_metadata**.<br>
 There are three collections:<br>
-- **files** to have all files indexed.
-- **metadata** to have all metadata and associated values found.
-- **links** to mak elink between files and metadata when found.
+- **files** collecting all indexed files.
+- **metadata** collecting all metadata and associated found values.
+- **links** to make link between files and metadata.
 
 
-latest file = **tika*<span Style="color:green">latest_number*</span>_docs.ipynb**
+latest file = **tika_docs_<span Style="color:green">latest_number</span>.ipynb**
 
 ## <span style="color:blue">Development environment</span>
 - using ubuntu 23 with python 3.11 and openjava sdk 17<br>

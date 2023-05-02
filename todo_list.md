@@ -17,6 +17,7 @@
 - [x] prepare mongodb database and collections
 - [x] Create indexed files list in mongodb collection files
 - [x] Create indexed metadata list in mongodb collection metadata
+- [x] jupyter File management review
 
 ## Issues Solved
 - [x] Correct directory change for jupyter files and related scan directory and metada_ref
