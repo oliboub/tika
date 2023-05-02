@@ -33,7 +33,7 @@ to change the log level and get more print:<br>
 - change **DEBUG_OL** value to **2** in the file ./python/global_variables.py
 
 ## <span style="color:blue">debug mode</span>
-to check functisn or different steps of the code, it can be done inside jupyeter lab, buy executing some steps and creating to launch unitary tests.<br>
+to check function or different steps of the code, it can be done inside jupyeter lab, buy executing some steps and creating to launch unitary tests.<br>
 
 ## backlog and issues
 Local follow-up is in the file:

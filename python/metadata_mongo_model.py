@@ -23,10 +23,15 @@ g.init()
 
 class files(Document):
 #    id = SequenceField(primary_key=True)
-    fileid = IntField(required=True, unique=True)
+#    fileid = IntField(required=True, unique=True)
+    fileid = SequenceField()
+    server = StringField(required=True)
+    fqdn = StringField(required=True)
     filename = StringField(required=True)
-    filedirectory=StringField(required=True)
-    category=StringField()
+    filedirectory = StringField(required=True)
+    inode = IntField(required=True)
+    category = StringField()
+    CreationDate = DateTimeField()
 
 
 # In[ ]:
@@ -36,15 +41,17 @@ class metadata(Document):
     metadataid=SequenceField()
     metadata = StringField(required=True)
     value = StringField(required=True)
+    CreationDate = DateTimeField()
 
 
 # In[ ]:
 
 
-class links:
+class links(Document):
     linkid = SequenceField()
     fileid=IntField(required=True)
     metadataid = IntField(required=True)
+    CreationDate = DateTimeField()
 
 
 # In[ ]:
