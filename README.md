@@ -4,10 +4,23 @@
 This git is used to try apache tika on diferent documents format.<br>
 the aim is to check some keywords in the content of the documents and create metadata in a mongodb database.<br>
 <br>
-List of metadata has to be in file: **metadata_ref.txt**.<br>
+### metadata_ref.csv (starting tika_docs_0005)
+List of metadata has to be in file: **metadata_ref.csv**.<br>
+file format:<br>
+    **metadata,string to search,[0/1],language<br>**
+    0 means word<br>
+    1 means sentence<br>
+<br>
+eg:<br>
+technology,technology,0,us<br>
+technology,technologique,0,us<br>
+technology,technik,0,us<br>
+
 <br>
 
 mongo database is named: **tika_metadata**.<br>
+All data in the database are in lowercases.
+
 There are three collections:<br>
 - **files** collecting all indexed files.
 - **metadata** collecting all metadata and associated found values.

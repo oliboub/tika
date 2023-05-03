@@ -47,26 +47,37 @@ host=socket.gethostname()
 fqdn = socket.getfqdn()
 if g.DEBUG_OL >= 1:
     print(host,fqdn)
-category="Engineering"
 
-dirlist = os.listdir("../"+category)
 
-if g.DEBUG_OL >= 1:
-    print(dirlist)
-
+# ## Define variables bellow
 
 # In[4]:
 
 
-metadata_ref = open("../metadata_ref.txt","r").read()
+category="tiff_ex"
+
+dirlist = os.listdir("../"+category)
+
+full_dir=os.path.abspath("../"+category)
 if g.DEBUG_OL >= 1:
-    print(metadata_ref)
+    print("------\nDirectory to scan:\n",full_dir)
+
+if g.DEBUG_OL >= 1:
+    print("------\nFile liste to scan:\n",dirlist)
+    
+metadata_ref = open("../metadata_ref.csv","r").read()
+
 metadata_lst = metadata_ref.split('\n')
 if g.DEBUG_OL >= 1:
-    print(metadata_lst,metadata_lst[0])
+    print("------\nmetadata list:\n",metadata_lst)#,metadata_lst[0])    
+
+aa=metadata_lst.index('')
+if aa != None:
+    metadata_lst.pop(aa)
+    print("------\nmetadata list:\n",metadata_lst)#,metadata_lst[0])    
 
 
-# In[24]:
+# In[5]:
 
 
 def load_db_files(category,name,fulldir,host,fqdn,inode):
@@ -98,7 +109,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode):
     return message,str(createdfile.fileid)
 
 
-# In[25]:
+# In[6]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -106,12 +117,12 @@ def load_db_files(category,name,fulldir,host,fqdn,inode):
 #load_db_files("Engineering","test2.jpg","/media/olivier/Donnees/Documents/Formations/tika/Engineering","pcobubuntu","pcobubuntu","113787699" )
 
 
-# In[26]:
+# In[7]:
 
 
-def load_db_metadata(meta,valeur):
+def load_db_metadata(meta,valeur,language):
     if g.DEBUG_OL >= 2:
-        print('function: load_db_metadata(',meta,',',valeur,')')
+        print('function: load_db_metadata(',meta,',',valeur,',',language,')')
     createdmetadata=metadata.objects(metadata=meta,value=valeur).first()
 
     if createdmetadata != None:
@@ -123,6 +134,7 @@ def load_db_metadata(meta,valeur):
     item=metadata()
     item.metadata=meta
     item.value=valeur
+    item.language=language
     item.CreationDate = creationdate
     item.save()
     createdmetadata=metadata.objects(metadata=meta,value=valeur).first()
@@ -132,7 +144,7 @@ def load_db_metadata(meta,valeur):
     return message,str(createdmetadata.metadataid)
 
 
-# In[27]:
+# In[8]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -141,7 +153,7 @@ def load_db_metadata(meta,valeur):
 #load_db_metadata('aircraft','a330')
 
 
-# In[33]:
+# In[9]:
 
 
 def load_db_links(fileid,metaid):
@@ -150,7 +162,7 @@ def load_db_links(fileid,metaid):
     
     createdlink=links.objects(fileid=int(fileid),metadataid=int(metaid)).first()
     if createdlink != None:
-        message="<-- Link: \""+str(createdlink.fileid)+"\" <--> \""+str(createdlink.metadataid)+"\"\t with id:"+str(createdlink.id)+"\t already exists"
+        message="<-- Link: \"fileid:"+str(createdlink.fileid)+"\" <--> \"metadata:"+str(createdlink.metadataid)+"\"\t with id:"+str(createdlink.id)+"\t already exists"
         return message,str(createdlink.linkid)
 
     now = datetime.now()
@@ -163,13 +175,13 @@ def load_db_links(fileid,metaid):
         
     createdlink=links.objects(fileid=int(fileid),metadataid=int(metaid)).first()
 
-    message="--> Link: \""+str(createdlink.fileid)+"\" <--> \""+str(createdlink.metadataid)+"\"\t with id:"+str(createdlink.id)+"\t  is created!"
+    message="--> Link: \"fileid:"+str(createdlink.fileid)+"\" <--> \"metadata:"+str(createdlink.metadataid)+"\"\t with id:"+str(createdlink.id)+"\t  is created!"
     if g.DEBUG_OL >= 2:
         print(message)
     return message,str(createdlink.linkid)        
 
 
-# In[34]:
+# In[10]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -177,81 +189,93 @@ def load_db_links(fileid,metaid):
 #load_db_links("1","1")
 
 
-# In[49]:
+# In[34]:
 
 
 def search_metadata(fileid,line,metadata_lst):
+#    g.DEBUG_OL=2
     if g.DEBUG_OL >= 2:
         print('function: search_metadata(',fileid,',',line,',',metadata_lst,')')
     if g.DEBUG_OL >= 2:
-        print(line)
+        print("line:",line)
     for i in range(len(line)):
+        string=line[i].lower()
         line[i] = line[i].lower()
-        if g.DEBUG_OL >= 2:
-            print(line[i])
+        if line[i] == "":
+            if g.DEBUG_OL >= 2:
+                print("line empty")
+        else:    
+            if g.DEBUG_OL >= 2:
+                print("line[i]",line[i],"string:",string)
+            for i in metadata_lst:
+                checkkey=i.split(",")
+                if g.DEBUG_OL >= 2:
+                    print("checkkey:",checkkey)
+                metaref=checkkey[0].lower()
+                key=checkkey[1].lower()
+                indice=int(checkkey[2])
+                langue=checkkey[3].lower()
+                if g.DEBUG_OL >= 2:
+                    print("[metaref:",metaref,"]\t[key:",key,"]\t[indice:",indice,"]\t[language:",langue,"]")
 
-    for i in metadata_lst:
-        checkkey=i.split(",")
-        key=checkkey[0]
-        indice=int(checkkey[1])
-        if g.DEBUG_OL >= 2:
-            print(key, indice)
-        value = [s for s in line if key.lower() in s]
-        if g.DEBUG_OL >= 2:
-            print("value:",value, "value[0]",value[0])
-        if value:
-            if indice == 1:
-                work = value[0].replace('part number','part')
-                work = work.replace('part no','part')
-                work = work.replace('\xa0','').replace('\t', ' ').replace(' : ',' ').replace(': ',' ').replace(':',' ').replace(', ',' ').replace(',',' ').split(' ')
+                value = key in string
+    
                 if g.DEBUG_OL >= 2:
-                    print("work:",work)
-                aa=work.index(key.lower())
-                value=work[int(aa)+1].lstrip(" ").rstrip(" ")
+                    print("value:",value) #, "value[0]",value[0])
+                if value:
+                    if indice == 0:
+                        work = string.replace('part number','part')
+                        work = work.replace('part no','part')
+                        work = work.replace('\xa0','').replace("’"," ").replace("("," ").replace(")"," ").replace('\t', ' ').replace(' : ',' ').replace(': ',' ').replace(':',' ').replace(', ',' ').replace(',',' ').replace('.',' ').replace('@',' ').split(' ')
+                        if g.DEBUG_OL >= 2:
+                            print("[key:",key,"]\t[work:",work,"]")
+                        
+                        aa = [i for i, elem in enumerate(work) if key in elem]
+                        #aa=work.index(key.lower())
+                        if g.DEBUG_OL >= 2:
+                            print("[indice:",indice,"]\t[work:",work,"]\tindex:",aa,"]")
+                        value=work[aa[0]].lstrip(" ").rstrip(" ")
                 
-            if indice == 0:
-                work = value[0].replace('\xa0','').replace('\t', ' ').replace(', ',' ').replace(',',' ').split(':')
-                toto=work
-                if g.DEBUG_OL >= 2:
-                    print(work)
-                aa=work.index(key.lower())
-                value=work[int(aa)+1].lstrip(" ").rstrip(" ")
+                    if indice == 1:
+                        work = string.replace('\xa0','').replace('\t', ' ').replace(', ',' ').replace(',',' ').split(':')
+                        if g.DEBUG_OL >= 2:
+                            print("[indice:",indice,"]\t[work:",work,']')
+                        value=work[0].lstrip(" ").rstrip(" ")
                    
 
 #        print(aa)
-            if g.DEBUG_OL >= 2:
-                print("key:",key,"\tvalue:",value)
-            message,metaid=load_db_metadata(key,value)
-            if g.DEBUG_OL >= 1:
-                print(message)
-            if g.DEBUG_OL >= 2:
-                print(fileid,metaid)
-            message,linkid=load_db_links(fileid,metaid)
-            if g.DEBUG_OL >= 1:
-                print(message)
+                    if g.DEBUG_OL >= 2:
+                        print("key:",key,"\tvalue:",value)
+                    message,metaid=load_db_metadata(metaref,value,langue)
+                    if g.DEBUG_OL >= 1:
+                        print(message)
+                    if g.DEBUG_OL >= 2:
+                        print(fileid,metaid)
+                    message,linkid=load_db_links(fileid,metaid)
+                    if g.DEBUG_OL >= 1:
+                        print(message)
 #        else:
 #            result=''
     return
 
 
-# In[50]:
+# In[35]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
 
 #search_metadata("29",['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Aircraft: A330', '', 'Part NO: 10011', '', '', ''],['aircraft,1', 'part,1', 'title,0'])
 #search_metadata("32",['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Texte de metadata', '', 'Ceci est un test de metadata', '', 'Title\xa0: Document de référence', '', '', '', '', '', 'Aircraft\xa0: A320\tceci est un avion avec des ailes', '', 'Part Number\xa0: JJ888888', ''] , ['aircraft,1', 'part,1', 'title,0'] )
+#search_metadata("14",['','Rapport Technologique','report on technologies'],['technology,technology,0,us', 'technology,technologique,0,fr', 'technology,technik,0,ge', 'copyright,copyright,0,us', 'aircraft,a320,0,', 'aircraft,a330,0,', 'aircraft,a340,0,', 'aircraft,a350,0,', 'title,titre,1,fr', 'title,titre,1,us'])
+#search_metadata(2,['','bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces  string: bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces'],['technology,technology,0,us','technology,technologies,0,us', 'technology,technologique,0,fr', 'technology,technik,0,ge', 'copyright,copyright,0,us', 'aircraft,a320,0,', 'aircraft,a330,0,', 'aircraft,a340,0,', 'aircraft,a350,0,', 'title,titre,1,fr', 'title,titre,1,us'])
 
 
-# In[52]:
+# In[36]:
 
 
 for i in dirlist:
     xx=[]
     str_match=[]
-    if g.DEBUG_OL >= 2:
-        print("-----------------------\n",i)
-    full_dir=os.path.abspath("../"+category)
     aa="../"+category+'/'+i
     inode=os.stat(aa).st_ino
     if g.DEBUG_OL >= 2:
@@ -262,12 +286,17 @@ for i in dirlist:
     if g.DEBUG_OL >= 2:
         print(line[0:-1])
 
+    if g.DEBUG_OL >= 1:
+        print("*** start of processing file:",host,":",full_dir,"/",i)
     if g.DEBUG_OL >= 2:
         print(category,i,full_dir,host,fqdn,inode)
     message,fileid=load_db_files(category,i,full_dir,host,fqdn,inode)
     if g.DEBUG_OL >= 1:
         print(message)
     result=search_metadata(fileid,line,metadata_lst)
+    if g.DEBUG_OL >= 1:
+        print("*** end of processing file:",host,":",full_dir,"/",i,"\n")
+print("End of process")
 
 
 # In[ ]:
