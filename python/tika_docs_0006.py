@@ -17,6 +17,7 @@
 
 import os
 import socket
+import hashlib
 import re
 from tika import parser
 from metadata_mongo_model import *
@@ -51,13 +52,14 @@ if g.DEBUG_OL >= 1:
 
 # ## Define variables bellow
 
-# In[4]:
+# In[35]:
 
 
-category="tiff_ex"
+category="Engineering"
 
 dirlist = os.listdir("../"+category)
-
+actualdir=os.path.abspath(".")
+print("actualdir:",actualdir)
 full_dir=os.path.abspath("../"+category)
 if g.DEBUG_OL >= 1:
     print("------\nDirectory to scan:\n",full_dir)
@@ -68,19 +70,28 @@ if g.DEBUG_OL >= 1:
 metadata_ref = open("../metadata_ref.csv","r").read()
 
 metadata_lst = metadata_ref.split('\n')
-if g.DEBUG_OL >= 1:
+if g.DEBUG_OL >= 2:
     print("------\nmetadata list:\n",metadata_lst)#,metadata_lst[0])    
 
 aa=metadata_lst.index('')
 if aa != None:
     metadata_lst.pop(aa)
-    print("------\nmetadata list:\n",metadata_lst)#,metadata_lst[0])    
+    print("------\nmetadata list:\n",metadata_lst)#,metadata_lst[0])
+for i in range(len(metadata_lst)-1,-1,-1):
+    if g.DEBUG_OL >= 2:
+        print(i)
+    aa=metadata_lst[i][0]
+    if aa  == "#":
+        metadata_lst.pop(i)
+        i=0
+if g.DEBUG_OL >= 1:
+    print("------\nmetadata list:\n",metadata_lst)    
 
 
-# In[5]:
+# In[36]:
 
 
-def load_db_files(category,name,fulldir,host,fqdn,inode):
+def load_db_files(category,name,fulldir,host,fqdn,inode,readable_hash):
     if g.DEBUG_OL >= 2:
         print('function: load_db_files(',category,',',name,',',fulldir,',',host,',',fqdn,',',inode,')')
     createdfile=files.objects(inode=inode,server=host,fqdn=fqdn,filename=name,filedirectory=fulldir,category=category).first()
@@ -97,6 +108,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode):
     item.filename = name
     item.filedirectory = fulldir
     item.inode = inode
+    item.md5sum = readable_hash
     item.category = category
     item.CreationDate = creationdate
     aaa=item.save()
@@ -109,7 +121,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode):
     return message,str(createdfile.fileid)
 
 
-# In[6]:
+# In[37]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -117,7 +129,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode):
 #load_db_files("Engineering","test2.jpg","/media/olivier/Donnees/Documents/Formations/tika/Engineering","pcobubuntu","pcobubuntu","113787699" )
 
 
-# In[7]:
+# In[38]:
 
 
 def load_db_metadata(meta,valeur,language):
@@ -144,7 +156,7 @@ def load_db_metadata(meta,valeur,language):
     return message,str(createdmetadata.metadataid)
 
 
-# In[8]:
+# In[39]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -153,7 +165,7 @@ def load_db_metadata(meta,valeur,language):
 #load_db_metadata('aircraft','a330')
 
 
-# In[9]:
+# In[40]:
 
 
 def load_db_links(fileid,metaid):
@@ -181,7 +193,7 @@ def load_db_links(fileid,metaid):
     return message,str(createdlink.linkid)        
 
 
-# In[10]:
+# In[41]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -189,7 +201,7 @@ def load_db_links(fileid,metaid):
 #load_db_links("1","1")
 
 
-# In[34]:
+# In[42]:
 
 
 def search_metadata(fileid,line,metadata_lst):
@@ -259,7 +271,7 @@ def search_metadata(fileid,line,metadata_lst):
     return
 
 
-# In[35]:
+# In[43]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -270,7 +282,7 @@ def search_metadata(fileid,line,metadata_lst):
 #search_metadata(2,['','bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces  string: bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces'],['technology,technology,0,us','technology,technologies,0,us', 'technology,technologique,0,fr', 'technology,technik,0,ge', 'copyright,copyright,0,us', 'aircraft,a320,0,', 'aircraft,a330,0,', 'aircraft,a340,0,', 'aircraft,a350,0,', 'title,titre,1,fr', 'title,titre,1,us'])
 
 
-# In[36]:
+# In[44]:
 
 
 for i in dirlist:
@@ -278,6 +290,12 @@ for i in dirlist:
     str_match=[]
     aa="../"+category+'/'+i
     inode=os.stat(aa).st_ino
+    with open(aa,"rb") as f:
+        bytes = f.read() # read file as bytes
+        readable_hash = hashlib.md5(bytes).hexdigest();
+        if g.DEBUG_OL >= 2:
+            print(readable_hash)
+
     if g.DEBUG_OL >= 2:
         print(full_dir,i,inode)
     parsed_file = parser.from_file(aa)
@@ -290,7 +308,7 @@ for i in dirlist:
         print("*** start of processing file:",host,":",full_dir,"/",i)
     if g.DEBUG_OL >= 2:
         print(category,i,full_dir,host,fqdn,inode)
-    message,fileid=load_db_files(category,i,full_dir,host,fqdn,inode)
+    message,fileid=load_db_files(category,i,full_dir,host,fqdn,inode,readable_hash)
     if g.DEBUG_OL >= 1:
         print(message)
     result=search_metadata(fileid,line,metadata_lst)
@@ -299,7 +317,7 @@ for i in dirlist:
 print("End of process")
 
 
-# In[ ]:
+# In[45]:
 
 
 if g.DEBUG_OL >= 1:
