@@ -4,9 +4,12 @@
 
 | id | Status | Title | Date | Dependence |
 | :-: | :-: | --- | --- | --- |
-| 00010 | &#x2610; | Review file identifier. inode is not good in case of multiple servers | 2023 May 02 | |
 | 00011 | &#x2610; | Check how to change ids by ObjectIDs in mongodb to get more possibilites. eg fileid by internal id | 2023 May 02 | |
 | 00012 | &#x2610; | Created a search frontend to search files having metadatas taking max metadatas to min | 2023 May 02 | |
+| 00017 | &#x2610; | Create a filter file to manage filters outside of the code | 2023 May 04 | 00010 |
+| 00018 | &#x2610; | Manage directory linked to filters in an external files out of the code | 2023 May 04 | 00017 |
+
+
 
 
 ## Issues
@@ -21,6 +24,9 @@
 ## Stories done
 | id | Status | Title | Date | Dependence |
 | :-: | :-: | --- | --- | --- |
+| 00019 | &#x2611; | Add # to make a line as a comment in metadata_ref.csv| 2023 May 04 |  |
+| 00010 | &#x2611; | Review file identifier. inode is not good in case of multiple servers | 2023 May 04 | |
+| 00016 | &#x2611; | Check how to manage md5sum of files and add it in the database | 2023 May 04 | 00010 |
 | 00015 | &#x2611; | Change reference to separate metadata and text search | 2023 May 03 | 000013 |
 | 00013 | &#x2611; | Search word using a part in reference list (eg: technolo versus technologies, technologiques| 2023 May 02 | 2023 May 03 |
 | 00014 | &#x2611; | Change data model to ad language in metadata | 2023 May 03 | 2023 May 03 |

@@ -3,7 +3,7 @@
 
 # ## tika_metadatas mongo_model
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -11,7 +11,7 @@ from mongoengine import *
 from datetime import datetime
 
 
-# In[2]:
+# In[ ]:
 
 
 import global_variables as g
@@ -29,7 +29,8 @@ class files(Document):
     fqdn = StringField(required=True)
     filename = StringField(required=True)
     filedirectory = StringField(required=True)
-    inode = IntField(required=True)
+    inode = LongField(required=True)
+    md5sum = StringField(required=True)
     category = StringField()
     CreationDate = DateTimeField()
 

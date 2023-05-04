@@ -7,5 +7,7 @@ aircraft,a330,0,
 aircraft,a340,0,
 aircraft,a350,0,
 title,titre,1,fr
-title,titre,1,us
+title,title,1,us
 company,airbus,0,
+#part,part NO,0,us
+#part,part number,0,us
