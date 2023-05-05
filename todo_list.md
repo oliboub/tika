@@ -15,8 +15,8 @@
 ## Issues
 | id | Status | Title | Date |
 | :-: | :-: | --- | --- |
-| 000002 | &#x2610; |try if searched metadata doesn't exists in a file |2023 May 02 |
-| | &#x2610; | | |
+| 000002 | &#x2610; |try if searched metadata doesn't exists in a file | 2023 May 02 |
+| 000004 | &#x2610; | Check how to pmanage metadata_ref multi keys, it doesn't work yet| 2023 May 05 |
 
 
 ------
@@ -28,8 +28,8 @@
 | 00010 | &#x2611; | Review file identifier. inode is not good in case of multiple servers | 2023 May 04 | |
 | 00016 | &#x2611; | Check how to manage md5sum of files and add it in the database | 2023 May 04 | 00010 |
 | 00015 | &#x2611; | Change reference to separate metadata and text search | 2023 May 03 | 000013 |
-| 00013 | &#x2611; | Search word using a part in reference list (eg: technolo versus technologies, technologiques| 2023 May 02 | 2023 May 03 |
-| 00014 | &#x2611; | Change data model to ad language in metadata | 2023 May 03 | 2023 May 03 |
+| 00013 | &#x2611; | Search word using a part in reference list (eg: technolo versus technologies, technologiques| 2023 May 02 |  |
+| 00014 | &#x2611; | Change data model to ad language in metadata | 2023 May 03 | |
 | 00001 | &#x2611; | Title multi words | 2023 May 02 | |
 | 00002 | &#x2611; | Jupyter File management review | 2023 May 02 | |
 | 00003 | &#x2611; | links between files and metadata are done | 2023 May 02 | |
@@ -44,7 +44,10 @@
 ## Issues Solved
 | id | Status | Title | Date |
 | :-: | :-: | --- | --- |
+| 00003 | &#x2611; | Correct replace filters for index 1 linked to sentences results | 2023 May 05 |
 | 00001 | &#x2611; | Correct directory change for jupyter files and related scan directory and metada_ref | 2023 May 01 |
+
+
 
 ------
 

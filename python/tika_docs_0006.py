@@ -52,7 +52,7 @@ if g.DEBUG_OL >= 1:
 
 # ## Define variables bellow
 
-# In[35]:
+# In[17]:
 
 
 category="Engineering"
@@ -88,7 +88,7 @@ if g.DEBUG_OL >= 1:
     print("------\nmetadata list:\n",metadata_lst)    
 
 
-# In[36]:
+# In[18]:
 
 
 def load_db_files(category,name,fulldir,host,fqdn,inode,readable_hash):
@@ -121,7 +121,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode,readable_hash):
     return message,str(createdfile.fileid)
 
 
-# In[37]:
+# In[6]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -129,7 +129,7 @@ def load_db_files(category,name,fulldir,host,fqdn,inode,readable_hash):
 #load_db_files("Engineering","test2.jpg","/media/olivier/Donnees/Documents/Formations/tika/Engineering","pcobubuntu","pcobubuntu","113787699" )
 
 
-# In[38]:
+# In[7]:
 
 
 def load_db_metadata(meta,valeur,language):
@@ -156,7 +156,7 @@ def load_db_metadata(meta,valeur,language):
     return message,str(createdmetadata.metadataid)
 
 
-# In[39]:
+# In[8]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -165,7 +165,7 @@ def load_db_metadata(meta,valeur,language):
 #load_db_metadata('aircraft','a330')
 
 
-# In[40]:
+# In[9]:
 
 
 def load_db_links(fileid,metaid):
@@ -193,7 +193,7 @@ def load_db_links(fileid,metaid):
     return message,str(createdlink.linkid)        
 
 
-# In[41]:
+# In[10]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
@@ -201,88 +201,89 @@ def load_db_links(fileid,metaid):
 #load_db_links("1","1")
 
 
-# In[42]:
+# # def search_metadata(fileid,line,metadata_lst):
+# #    g.DEBUG_OL=2
+#     if g.DEBUG_OL >= 2:
+#         print('function: search_metadata(',fileid,',',line,',',metadata_lst,')')
+#     if g.DEBUG_OL >= 2:
+#         print("line:",line)
+#     for i in range(len(line)):
+#         string=line[i].lower()
+#         line[i] = line[i].lower()
+#         if line[i] == "":
+#             if g.DEBUG_OL >= 2:
+#                 print("line empty")
+#         else:    
+#             if g.DEBUG_OL >= 2:
+#                 print("line[i]",line[i],"string:",string)
+#             for i in metadata_lst:
+#                 checkkey=i.split(",")
+#                 if g.DEBUG_OL >= 2:
+#                     print("checkkey:",checkkey)
+#                 metaref=checkkey[0].lower()
+#                 key=checkkey[1].lower()
+#                 indice=int(checkkey[2])
+#                 langue=checkkey[3].lower()
+#                 if g.DEBUG_OL >= 2:
+#                     print("[metaref:",metaref,"]\t[key:",key,"]\t[indice:",indice,"]\t[language:",langue,"]\t[string:",string,']')
+# 
+#                 value = key in string
+#     
+#                 if g.DEBUG_OL >= 2:
+#                     print("value:",value) #, "value[0]",value[0])
+#                 if value:
+#                     if indice == 0:
+#                         work = work.replace('\xa0','').replace("’"," ").replace("("," ").replace(")"," ").replace('\t', ' ').replace(' : ',' ').replace(': ',' ').replace(':',' ').replace(', ',' ').replace(',',' ').replace('.',' ').replace('@',' ').split(' ')
+#                         if g.DEBUG_OL >= 2:
+#                             print("[key:",key,"]\t[work:",work,"]")
+#                         
+#                         aa = [i for i, elem in enumerate(work) if key in elem]
+#                         #aa=work.index(key.lower())
+#                         if g.DEBUG_OL >= 2:
+#                             print("[indice:",indice,"]\t[work:",work,"]\tindex:",aa,"]")
+#                         value=work[aa[0]].lstrip(" ").rstrip(" ")
+#                 
+#                     if indice == 1:
+#                         work = string.replace('part number','part')
+#                         work = work.replace('part no','part')
+#                         if g.DEBUG_OL >= 2:
+#                             print("[key:",key,"]\t[indice:",indice,"]\t[work:",work,']')
+#                         work = string.replace(key+" ",key+":").replace('\xa0','').replace('\t', ' ').replace(', ',' ').replace(',',' ').split(':')
+#                         if g.DEBUG_OL >= 2:
+#                             print("[key:",key,"]\t[indice:",indice,"]\t[work:",work,']')
+#                         aa=work.index(key.lower())
+#                         if g.DEBUG_OL >= 2:
+#                             print("[aa:",aa,"]\t[indice:",indice,"]\t[work:",work,']')
+#                         value=work[aa+1].lstrip(" ").rstrip(" ")
+#                    
+# 
+#                     if g.DEBUG_OL >= 2:
+#                         print("key:",key,"\tvalue:",value)
+#                     message,metaid=load_db_metadata(metaref,value,langue)
+#                     if g.DEBUG_OL >= 1:
+#                         print(message)
+#                     if g.DEBUG_OL >= 2:
+#                         print(fileid,metaid)
+#                     message,linkid=load_db_links(fileid,metaid)
+#                     if g.DEBUG_OL >= 1:
+#                         print(message)
+# #        else:
+# #            result=''
+#     return
 
-
-def search_metadata(fileid,line,metadata_lst):
-#    g.DEBUG_OL=2
-    if g.DEBUG_OL >= 2:
-        print('function: search_metadata(',fileid,',',line,',',metadata_lst,')')
-    if g.DEBUG_OL >= 2:
-        print("line:",line)
-    for i in range(len(line)):
-        string=line[i].lower()
-        line[i] = line[i].lower()
-        if line[i] == "":
-            if g.DEBUG_OL >= 2:
-                print("line empty")
-        else:    
-            if g.DEBUG_OL >= 2:
-                print("line[i]",line[i],"string:",string)
-            for i in metadata_lst:
-                checkkey=i.split(",")
-                if g.DEBUG_OL >= 2:
-                    print("checkkey:",checkkey)
-                metaref=checkkey[0].lower()
-                key=checkkey[1].lower()
-                indice=int(checkkey[2])
-                langue=checkkey[3].lower()
-                if g.DEBUG_OL >= 2:
-                    print("[metaref:",metaref,"]\t[key:",key,"]\t[indice:",indice,"]\t[language:",langue,"]")
-
-                value = key in string
-    
-                if g.DEBUG_OL >= 2:
-                    print("value:",value) #, "value[0]",value[0])
-                if value:
-                    if indice == 0:
-                        work = string.replace('part number','part')
-                        work = work.replace('part no','part')
-                        work = work.replace('\xa0','').replace("’"," ").replace("("," ").replace(")"," ").replace('\t', ' ').replace(' : ',' ').replace(': ',' ').replace(':',' ').replace(', ',' ').replace(',',' ').replace('.',' ').replace('@',' ').split(' ')
-                        if g.DEBUG_OL >= 2:
-                            print("[key:",key,"]\t[work:",work,"]")
-                        
-                        aa = [i for i, elem in enumerate(work) if key in elem]
-                        #aa=work.index(key.lower())
-                        if g.DEBUG_OL >= 2:
-                            print("[indice:",indice,"]\t[work:",work,"]\tindex:",aa,"]")
-                        value=work[aa[0]].lstrip(" ").rstrip(" ")
-                
-                    if indice == 1:
-                        work = string.replace('\xa0','').replace('\t', ' ').replace(', ',' ').replace(',',' ').split(':')
-                        if g.DEBUG_OL >= 2:
-                            print("[indice:",indice,"]\t[work:",work,']')
-                        value=work[0].lstrip(" ").rstrip(" ")
-                   
-
-#        print(aa)
-                    if g.DEBUG_OL >= 2:
-                        print("key:",key,"\tvalue:",value)
-                    message,metaid=load_db_metadata(metaref,value,langue)
-                    if g.DEBUG_OL >= 1:
-                        print(message)
-                    if g.DEBUG_OL >= 2:
-                        print(fileid,metaid)
-                    message,linkid=load_db_links(fileid,metaid)
-                    if g.DEBUG_OL >= 1:
-                        print(message)
-#        else:
-#            result=''
-    return
-
-
-# In[43]:
+# In[31]:
 
 
 ## UNITARY TESTS - comment all lines before to save as python file
 
 #search_metadata("29",['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Aircraft: A330', '', 'Part NO: 10011', '', '', ''],['aircraft,1', 'part,1', 'title,0'])
-#search_metadata("32",['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Texte de metadata', '', 'Ceci est un test de metadata', '', 'Title\xa0: Document de référence', '', '', '', '', '', 'Aircraft\xa0: A320\tceci est un avion avec des ailes', '', 'Part Number\xa0: JJ888888', ''] , ['aircraft,1', 'part,1', 'title,0'] )
+#search_metadata("32",['', '', '', '', '', '', '', '', '', '', '', 'title: Various Aircraft of today', '', '', '', '', '', '', 'Titre Advantage of Working here', '', '', '', '', '', '', '', 'Texte de metadata', '', 'Ceci est un test de metadata', '', 'Title\xa0: Document de référence', '', '', '', '', '', 'Aircraft\xa0: A320\tceci est un avion avec des ailes', '', 'Part Number\xa0: JJ888888', ''] , ['aircraft,a320,0,us', 'title,title,1,us', 'title,titre,1,fr','part,part NO',1,us','part','part number',1,us] )
+#search_metadata("12",['', '', '', '', '', '', '', '', '', '', '', 'Part Number: aaaaaaa1', '', '', '', '', '', '', 'Part NO X435F', '', '', '', '', '', '', '', 'Texte de metadata', '', 'Ceci est un test de metadata', '', 'Title\xa0: Document de référence', '', '', '', '', '', 'Aircraft\xa0: A320\tceci est un avion avec des ailes', '', 'Part Number\xa0: JJ888888', ''] , ['aircraft,a320,0,us', 'title,title,1,us', 'title,titre,1,fr','part,"part NO",1,us','part,"part number",1,us'] )
 #search_metadata("14",['','Rapport Technologique','report on technologies'],['technology,technology,0,us', 'technology,technologique,0,fr', 'technology,technik,0,ge', 'copyright,copyright,0,us', 'aircraft,a320,0,', 'aircraft,a330,0,', 'aircraft,a340,0,', 'aircraft,a350,0,', 'title,titre,1,fr', 'title,titre,1,us'])
 #search_metadata(2,['','bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces  string: bande l) et  reposent sur des technologies radio surannées. la raison en est que l’évolution de ces'],['technology,technology,0,us','technology,technologies,0,us', 'technology,technologique,0,fr', 'technology,technik,0,ge', 'copyright,copyright,0,us', 'aircraft,a320,0,', 'aircraft,a330,0,', 'aircraft,a340,0,', 'aircraft,a350,0,', 'title,titre,1,fr', 'title,titre,1,us'])
 
 
-# In[44]:
+# In[13]:
 
 
 for i in dirlist:
@@ -317,7 +318,7 @@ for i in dirlist:
 print("End of process")
 
 
-# In[45]:
+# In[14]:
 
 
 if g.DEBUG_OL >= 1:
