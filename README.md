@@ -36,11 +36,15 @@ latest file = **tika_docs_<span Style="color:green">latest_number</span>.ipynb**
 - working in a venv (virtual environment)<br>
 - To use jupyter files, you need to add the directory **python** in the PYTHONPATH variable.<br>
 
+- for tika, java jdk is needed
+
 
 ## <span style="color:blue">additional libraries used</span>
 to be added in the vitrual environment with pip.
 - **mongoengine**
 - **tika**
+- **requests**
+- **url3lib**
 
 ## <span style="color:blue">log mod</span>
 to change the log level and get more print:<br>
